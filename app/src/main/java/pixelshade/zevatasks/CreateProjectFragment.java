@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ public class CreateProjectFragment extends DialogFragment implements AdapterView
 
     private OnFragmentInteractionListener mListener;
     private int mSelectedPresetIndex = -1;
-
+    private View mView;
 
     public CreateProjectFragment() {
         // Required empty public constructor
@@ -42,27 +43,45 @@ public class CreateProjectFragment extends DialogFragment implements AdapterView
            presetsNamesList.add(p.name);
         }
 
-        Spinner presetsSpinner = (Spinner) getView().findViewById(R.id.presetsSpinner);
-        presetsSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,presetsNamesList));
-        presetsSpinner.setOnItemSelectedListener(this);
+
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        mView = inflater.inflate(R.layout.fragment_create_project, null);
+
+        Spinner presetsSpinner = (Spinner) mView.findViewById(R.id.presetsSpinner);
+        presetsSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,presetsNamesList));
+        presetsSpinner.setOnItemSelectedListener(this);
+
 
         builder.setTitle("Create project")
-                .setView(inflater.inflate(R.layout.fragment_create_project, null))
+                .setView(mView)
                 .setPositiveButton(getString(R.string.create_project), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        EditText projectNameEditText= (EditText) mView.findViewById(R.id.projectNameEditText);
+                        EditText projectHoursEditText= (EditText) mView.findViewById(R.id.projectHoursEditText);
+                        Spinner presetsSpinner = (Spinner) mView.findViewById(R.id.presetsSpinner);
+
+                        String projectName = projectNameEditText.getText().toString();
+                        int timeBank = Integer.valueOf(projectHoursEditText.getText().toString());
+
+                        // we are creating empty project
                         if(mSelectedPresetIndex==-1) {
-                            Toast.makeText(getActivity(),"You must select preset to create project",Toast.LENGTH_LONG).show();
+                            Project project = new Project();
+                            project.name = projectName;
+                            project.timeBank = timeBank;
+
+                            project.save();
+//                            Toast.makeText(getActivity(),"Created an empty project",Toast.LENGTH_LONG).show();
+
                             return;
                         }
-                        Spinner presetsSpinner = (Spinner) getView().findViewById(R.id.presetsSpinner);
+
+
                         Project preset = projectPresetsList.get(mSelectedPresetIndex);
-                        // TODO: CREATE PROJECT FROM PRESET
-                        preset.createProject();
-                        Project project = new Project();
+                        Project project  = preset.projectFromPreset(projectName,timeBank);
+
 
                     }
                 })
@@ -78,7 +97,6 @@ public class CreateProjectFragment extends DialogFragment implements AdapterView
 //                        // of the selected item
 //                    }
 //                });
-
 
         return builder.create();
     }

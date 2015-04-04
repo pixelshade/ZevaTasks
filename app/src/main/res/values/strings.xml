@@ -19,4 +19,9 @@
     <string name="create_project">Create project</string>
     <string name="project_name">Project Name</string>
     <string name="amount_of_hours_for_project">Amount of hours for project</string>
+    <string name="add_task">Add task</string>
+    <string name="task_name">Task Name</string>
+    <string name="task_info">Task Info\n 1.What\n 2.To\n 3.Do</string>
+    <string name="create_task">Create Task</string>
+    <string name="ok">Ok</string>
 </resources>

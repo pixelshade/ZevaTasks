@@ -19,7 +19,11 @@ public class Task extends SugarRecord<Task>{
 
     // constructors
     public Task() {
+        completedAt = new Date(Long.MAX_VALUE);
     }
 
+    public String ToString(){
+        return name;
+    }
 
 }

@@ -1,28 +1,24 @@
 package pixelshade.zevatasks;
 
-import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pixelshade.zevatasks.tasks.Project;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, TaskFragment.OnFragmentInteractionListener, CreateProjectFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, TasksFragment.OnFragmentInteractionListener, CreateProjectFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -34,6 +30,7 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+    private static List<Project> mProjects = new ArrayList<Project>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,19 +49,24 @@ public class MainActivity extends ActionBarActivity
 
     }
 
+    public static List<Project> getProjects(){
+        mProjects = Project.listAll(Project.class);
+        return mProjects;
+    }
+
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
 
+Toast.makeText(this, "item#" + position, Toast.LENGTH_LONG).show();
 
 
-
-        Project p = Project.findById(Project.class,(long) position);
+        Project p = getProjects().get(position);
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container, TaskFragment.newInstance(p)) //PlaceholderFragment.newInstance(position + 1)
+                .replace(R.id.container, TasksFragment.newInstance(p)) //PlaceholderFragment.newInstance(position + 1)
                 .commit();
     }
 
@@ -103,6 +105,7 @@ public class MainActivity extends ActionBarActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {

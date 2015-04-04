@@ -63,6 +63,8 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
+    private List<Project> mProjectList= new ArrayList<Project>();
+
     public NavigationDrawerFragment() {
     }
 
@@ -102,17 +104,17 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        List<Project> projectList = Project.listAll(Project.class);
+        mProjectList = Project.listAll(Project.class);
         //TODO: custom adapter
         List<String> projectNames = new ArrayList<>();
-        for(Project p : projectList){
+        for(Project p : mProjectList){
             projectNames.add(p.name);
         }
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,projectNames
-
+                android.R.id.text1,
+                projectNames
                ));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
@@ -256,8 +258,13 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (item.getItemId() == R.id.action_example) {
-            CreateProjectFragment createProjectFragment = new CreateProjectFragment();
-            createProjectFragment.show(getFragmentManager(),"createProject");
+            CreateTask createTaskFragment = new CreateTask();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(createTaskFragment.ARG_PROJECT,mProjectList.get(mCurrentSelectedPosition));
+            createTaskFragment.setArguments(bundle);
+            createTaskFragment.show(getFragmentManager(),"createTask");
+//            CreateProjectFragment createProjectFragment = new CreateProjectFragment();
+//            createProjectFragment.show(getFragmentManager(),"createProject");
             return true;
         }
 
