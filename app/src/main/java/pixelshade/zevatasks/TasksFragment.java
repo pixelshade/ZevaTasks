@@ -14,6 +14,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,7 +30,7 @@ import pixelshade.zevatasks.tasks.Task;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class TasksFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class TasksFragment extends Fragment implements AbsListView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private static final String ARG_PROJECT = "projectArgument";
     private Project mProject;
@@ -74,9 +75,13 @@ public class TasksFragment extends Fragment implements AbsListView.OnItemClickLi
             mProject = (Project)getArguments().getSerializable(ARG_PROJECT);
             if(mProject!=null) {
                 mTaskList = Task.find(Task.class, "project = ?", mProject.getId().toString());
+                List<String> taskNamesList = new ArrayList<String>();
+                for(Task t :mTaskList){
+                    taskNamesList.add(t.name);
+                }
 
-                mAdapter = new ArrayAdapter<Task>(getActivity(),
-                        android.R.layout.simple_list_item_1, android.R.id.text1, mTaskList);
+                mAdapter = new ArrayAdapter<String>(getActivity(),
+                        android.R.layout.simple_list_item_1, android.R.id.text1, taskNamesList);
 
             }
         }
@@ -94,7 +99,7 @@ public class TasksFragment extends Fragment implements AbsListView.OnItemClickLi
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
-
+        mListView.setOnItemLongClickListener(this);
         return view;
     }
 
@@ -102,7 +107,7 @@ public class TasksFragment extends Fragment implements AbsListView.OnItemClickLi
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         ((MainActivity) activity).onSectionAttached(
-                (Project)getArguments().getSerializable(ARG_PROJECT));
+                (Project) getArguments().getSerializable(ARG_PROJECT));
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -141,6 +146,16 @@ public class TasksFragment extends Fragment implements AbsListView.OnItemClickLi
         if (emptyView instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        CreateWork createWorkFragment = new CreateWork();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(createWorkFragment.ARG_TASK,mTaskList.get(position));
+        createWorkFragment.setArguments(bundle);
+        createWorkFragment.show(getFragmentManager(),"CREATE_WORK");
+        return false;
     }
 
     /**

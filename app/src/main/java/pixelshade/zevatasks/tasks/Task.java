@@ -2,12 +2,13 @@ package pixelshade.zevatasks.tasks;
 
 import com.orm.SugarRecord;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by pixelshade on 1.4.2015.
  */
-public class Task extends SugarRecord<Task>{
+public class Task extends SugarRecord<Task> implements Serializable{
 
     public String name;
     public String info;

@@ -24,4 +24,7 @@
     <string name="task_info">Task Info\n 1.What\n 2.To\n 3.Do</string>
     <string name="create_task">Create Task</string>
     <string name="ok">Ok</string>
+    <string name="worker_name">Worker Name</string>
+    <string name="hours_of_work">Hours of Work</string>
+    <string name="add_work">Add work</string>
 </resources>
