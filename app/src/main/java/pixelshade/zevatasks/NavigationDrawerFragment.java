@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -96,8 +97,18 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
-                R.layout.fragment_navigation_drawer, container, false);
+        View v =  inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        mDrawerListView = (ListView) v.findViewById(R.id.projectsListView);
+        Button addProjectButton = (Button) v.findViewById(R.id.addProjectButton);
+        addProjectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateProjectFragment createProjectFragment = new CreateProjectFragment();
+                createProjectFragment.show(getFragmentManager(), "createProject");
+            }
+        });
+
+
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -117,7 +128,7 @@ public class NavigationDrawerFragment extends Fragment {
                 projectNames
                ));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+        return v;
     }
 
     public boolean isDrawerOpen() {
@@ -263,8 +274,7 @@ public class NavigationDrawerFragment extends Fragment {
             bundle.putSerializable(createTaskFragment.ARG_PROJECT,mProjectList.get(mCurrentSelectedPosition));
             createTaskFragment.setArguments(bundle);
             createTaskFragment.show(getFragmentManager(),"createTask");
-//            CreateProjectFragment createProjectFragment = new CreateProjectFragment();
-//            createProjectFragment.show(getFragmentManager(),"createProject");
+
             return true;
         }
 
