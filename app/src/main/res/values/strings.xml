@@ -27,4 +27,6 @@
     <string name="worker_name">Worker Name</string>
     <string name="hours_of_work">Hours of Work</string>
     <string name="add_work">Add work</string>
+    <string name="title_activity_task_overview">TaskOverview</string>
+    <string name="hello_world">Hello world!</string>
 </resources>

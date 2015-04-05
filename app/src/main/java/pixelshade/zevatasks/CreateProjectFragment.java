@@ -26,7 +26,7 @@ import pixelshade.zevatasks.tasks.Project;
 
 public class CreateProjectFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
-    private OnFragmentInteractionListener mListener;
+//    private OnFragmentInteractionListener mListener;
     private int mSelectedPresetIndex = -1;
     private View mView;
 
@@ -73,6 +73,7 @@ public class CreateProjectFragment extends DialogFragment implements AdapterView
                             project.timeBank = timeBank;
 
                             project.save();
+//                            mListener.onCreatedProject(project);
 //                            Toast.makeText(getActivity(),"Created an empty project",Toast.LENGTH_LONG).show();
 
                             return;
@@ -91,12 +92,6 @@ public class CreateProjectFragment extends DialogFragment implements AdapterView
 
                     }
                 });
-//                .setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,presetsNamesList), new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        // The 'which' argument contains the index position
-//                        // of the selected item
-//                    }
-//                });
 
         return builder.create();
     }
@@ -104,18 +99,18 @@ public class CreateProjectFragment extends DialogFragment implements AdapterView
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+//        try {
+//            mListener = (OnFragmentInteractionListener) activity;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(activity.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+//        mListener = null;
     }
 
     @Override
@@ -128,9 +123,8 @@ public class CreateProjectFragment extends DialogFragment implements AdapterView
 
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
+//    public interface OnFragmentInteractionListener {
+//        public void onCreatedProject(Project project);
+//    }
 
 }

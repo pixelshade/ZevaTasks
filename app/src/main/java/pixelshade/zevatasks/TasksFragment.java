@@ -1,6 +1,7 @@
 package pixelshade.zevatasks;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
@@ -129,7 +130,9 @@ public class TasksFragment extends Fragment implements AbsListView.OnItemClickLi
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-
+            Intent intent = new Intent(getActivity(),TaskOverview.class);
+            intent.putExtra(TaskOverview.ARG_TASK_ID, mTaskList.get(position).getId());
+            startActivity(intent);
             mListener.onFragmentInteraction(mTaskList.get(position).getId());
 
         }

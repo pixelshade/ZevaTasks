@@ -15,4 +15,10 @@ public class Work extends SugarRecord<Work> {
 
     public Work(){
     }
+
+    public Work(String worker, long hours, Task task) {
+        this.worker = worker;
+        this.hours = hours;
+        this.task = task;
+    }
 }

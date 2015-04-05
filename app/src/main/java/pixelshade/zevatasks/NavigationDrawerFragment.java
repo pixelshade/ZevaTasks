@@ -21,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,7 +114,7 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mProjectList = Project.listAll(Project.class);
+        mProjectList = MainActivity.getProjects();
         //TODO: custom adapter
         List<String> projectNames = new ArrayList<>();
         for(Project p : mProjectList){
@@ -268,13 +267,17 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
-        if (item.getItemId() == R.id.action_example) {
-            CreateTask createTaskFragment = new CreateTask();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(createTaskFragment.ARG_PROJECT,mProjectList.get(mCurrentSelectedPosition));
-            createTaskFragment.setArguments(bundle);
-            createTaskFragment.show(getFragmentManager(),"createTask");
-
+        if (item.getItemId() == R.id.action_add_task_btn) {
+            if( mProjectList.size()==0){
+                CreateProjectFragment createProjectFragment = new CreateProjectFragment();
+                createProjectFragment.show(getFragmentManager(), "createProject");
+            } else {
+                CreateTask createTaskFragment = new CreateTask();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(createTaskFragment.ARG_PROJECT, mProjectList.get(mCurrentSelectedPosition));
+                createTaskFragment.setArguments(bundle);
+                createTaskFragment.show(getFragmentManager(), "createTask");
+            }
             return true;
         }
 
@@ -290,6 +293,7 @@ public class NavigationDrawerFragment extends Fragment {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.app_name);
+
     }
 
     private ActionBar getActionBar() {
@@ -304,5 +308,11 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+    }
+
+
+    public void AddProjectToList(Project project){
+        mProjectList.add(project);
+
     }
 }

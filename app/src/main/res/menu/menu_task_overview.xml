@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="pixelshade.zevatasks.TaskOverview">
+    <item android:id="@+id/action_add_work_btn"
+        android:title="@string/add_work"
+        android:icon="@android:drawable/ic_input_add"
+        android:orderInCategory="100" app:showAsAction="ifRoom" />
+</menu>

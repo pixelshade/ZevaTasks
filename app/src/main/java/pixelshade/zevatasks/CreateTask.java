@@ -32,6 +32,7 @@ public class CreateTask extends DialogFragment implements AdapterView.OnItemSele
     private Project mProject;
 
 
+
     public CreateTask() {
         // Required empty public constructor
     }
@@ -63,7 +64,7 @@ public class CreateTask extends DialogFragment implements AdapterView.OnItemSele
                         task.info = taskInfo;
                         task.project = mProject;
                         task.save();
-
+//                        mListener.onCreatedTask(task);
                         }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -84,7 +85,7 @@ public class CreateTask extends DialogFragment implements AdapterView.OnItemSele
 //            mListener = (OnFragmentInteractionListener) activity;
 //        } catch (ClassCastException e) {
 //            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
+//                    + " must implement OnCreatedTask");
 //        }
     }
 
@@ -106,7 +107,7 @@ public class CreateTask extends DialogFragment implements AdapterView.OnItemSele
 
 //    public interface OnFragmentInteractionListener {
 //        // TODO: Update argument type and name
-//        public void onFragmentInteraction(Uri uri);
+//        public void onCreatedTask(Task task);
 //    }
 
 }

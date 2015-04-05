@@ -18,7 +18,7 @@ import pixelshade.zevatasks.tasks.Project;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, TasksFragment.OnFragmentInteractionListener, CreateProjectFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, TasksFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -61,9 +61,9 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
 
 Toast.makeText(this, "item#" + position, Toast.LENGTH_LONG).show();
-
-
-        Project p = getProjects().get(position);
+        Project p = null;
+        if(getProjects().size() !=0)
+            p = getProjects().get(position);
 
         fragmentManager.beginTransaction()
                 .replace(R.id.container, TasksFragment.newInstance(p)) //PlaceholderFragment.newInstance(position + 1)
@@ -121,8 +121,8 @@ Toast.makeText(this, "item#" + position, Toast.LENGTH_LONG).show();
         Toast.makeText(this, ""+id, Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
+//    @Override
+//    public void onCreatedProject(Project project) {
+//        mNavigationDrawerFragment.AddProjectToList(project);
+//    }
 }
