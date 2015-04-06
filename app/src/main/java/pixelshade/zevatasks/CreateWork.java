@@ -58,6 +58,9 @@ public class CreateWork extends DialogFragment implements AdapterView.OnItemSele
 
                         mTask.timeSpent+=hours;
                         mTask.save();
+
+                        mTask.project.timeSpent+=hours;
+                        mTask.project.save();
                         }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

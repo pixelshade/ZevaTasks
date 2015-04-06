@@ -1,28 +1,39 @@
 package pixelshade.zevatasks;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import pixelshade.zevatasks.tasks.Task;
 import pixelshade.zevatasks.tasks.Work;
 
 
-public class TaskOverview extends ActionBarActivity {
+public class TaskOverview extends ActionBarActivity implements View.OnClickListener {
     public static String ARG_TASK_ID = "task_index";
-
+    private PieChart mPieChart;
+    private ListView mWorkersLV;
     private Task mTask;
+    private Button mToggleButton;
+    private List<Work> mWorks;
+
+    private boolean mShowChart = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +51,52 @@ public class TaskOverview extends ActionBarActivity {
 
         TextView nameTV = (TextView) findViewById(R.id.taskNameTextView);
         TextView infoTV = (TextView) findViewById(R.id.taskInfoTextView);
-        ListView workersLV = (ListView) findViewById(R.id.taskWorkersListView);
+        mWorkersLV = (ListView) findViewById(R.id.taskWorkersListView);
+        mToggleButton = (Button) findViewById(R.id.toggleWorksListChartButton);
+
+        mToggleButton.setOnClickListener(this);
 
         nameTV.setAllCaps(true);
         nameTV.setText(mTask.name);
         infoTV.setText(mTask.info);
 
-        List<Work> works = Work.find(Work.class, "task = ?", mTask.getId().toString());
+        mWorks = Work.find(Work.class, "task = ?", mTask.getId().toString());
 
-        WorkersAdapter workersAdapter = new WorkersAdapter(this, works);
-        workersLV.setAdapter(workersAdapter);
+        mPieChart = (PieChart) findViewById(R.id.workPieChart);
+
+        setUpPieChart(mWorks, mPieChart);
+        WorkersAdapter workersAdapter = new WorkersAdapter(this, mWorks);
+        mWorkersLV.setAdapter(workersAdapter);
+
+
+        ToggleChartListVisibility();
+    }
+
+    private static void setUpPieChart(List<Work> mWorks, PieChart mPieChart) {
+        ArrayList<Entry> yVals = new ArrayList<Entry>();
+        ArrayList<String> xVals = new ArrayList<String>();
+
+        int i = 0;
+        for(Work w: mWorks) {
+            yVals.add(new Entry(w.hours,i));
+            xVals.add(w.worker);
+            i++;
+        }
+
+
+        ArrayList<Integer> colors = new ArrayList<Integer>();
+        for (int c : ColorTemplate.COLORFUL_COLORS)
+            colors.add(c);
+
+        PieDataSet pieDataSet = new PieDataSet(yVals, "hours");
+        pieDataSet.setColors(colors);
+        PieData pieData = new PieData(xVals,pieDataSet);
+        mPieChart.setData(pieData);
+        mPieChart.setDescription("");
+
+        mPieChart.animateXY(1500, 1500);
+        Legend l = mPieChart.getLegend();
+        l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART_INSIDE);
     }
 
 
@@ -83,33 +130,21 @@ public class TaskOverview extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onClick(View v) {
+        ToggleChartListVisibility();
+    }
 
-    public class WorkersAdapter extends ArrayAdapter<Work> {
-        private Context context;
-        private LayoutInflater inflater;
-        private List<Work> workItems;
-
-
-        public WorkersAdapter(Context context, List<Work> values) {
-            super(context, R.layout.workers_row_layout, values);
-            this.context = context;
-            this.workItems = values;
+    private void ToggleChartListVisibility(){
+        if(mShowChart){
+            mWorkersLV.setVisibility(View.GONE);
+            mPieChart.setVisibility(View.VISIBLE);
+            mToggleButton.setText("Show list");
+        } else {
+            mWorkersLV.setVisibility(View.VISIBLE);
+            mPieChart.setVisibility(View.GONE);
+            mToggleButton.setText("Show chart");
         }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(R.layout.workers_row_layout, parent, false);
-            TextView nameTextView = (TextView) rowView.findViewById(R.id.workerNameTextView);
-            TextView hoursTextView = (TextView) rowView.findViewById(R.id.workerHoursTextView);
-
-            nameTextView.setText(workItems.get(position).worker);
-            hoursTextView.setText("" + workItems.get(position).hours);
-
-
-            return rowView;
-
-        }
+        mShowChart = !mShowChart;
     }
 }

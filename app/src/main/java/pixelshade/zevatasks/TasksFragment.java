@@ -35,7 +35,7 @@ public class TasksFragment extends Fragment implements AbsListView.OnItemClickLi
 
     private static final String ARG_PROJECT = "projectArgument";
     private Project mProject;
-
+    private long mTimeSpent;
     List<Task> mTaskList;
 
     private OnFragmentInteractionListener mListener;
@@ -79,6 +79,7 @@ public class TasksFragment extends Fragment implements AbsListView.OnItemClickLi
                 List<String> taskNamesList = new ArrayList<String>();
                 for(Task t :mTaskList){
                     taskNamesList.add(t.name);
+                    mTimeSpent +=t.timeSpent;
                 }
 
                 mAdapter = new ArrayAdapter<String>(getActivity(),
@@ -97,6 +98,9 @@ public class TasksFragment extends Fragment implements AbsListView.OnItemClickLi
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+
+        TextView hoursLeftTextView = (TextView) view.findViewById(R.id.hoursRemainingTextView);
+        hoursLeftTextView.setText("Hours: "+mTimeSpent+"/"+mProject.timeBank);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
