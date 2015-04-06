@@ -29,4 +29,5 @@
     <string name="add_work">Add work</string>
     <string name="title_activity_task_overview">TaskOverview</string>
     <string name="hello_world">Hello world!</string>
+    <string name="you_must_create_a_project_tap_on">You must create a project. Tap on a + sign.</string>
 </resources>

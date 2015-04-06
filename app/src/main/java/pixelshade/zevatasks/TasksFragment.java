@@ -98,10 +98,10 @@ public class TasksFragment extends Fragment implements AbsListView.OnItemClickLi
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
-
-        TextView hoursLeftTextView = (TextView) view.findViewById(R.id.hoursRemainingTextView);
-        hoursLeftTextView.setText("Hours: "+mTimeSpent+"/"+mProject.timeBank);
-
+if(mProject!=null) {
+    TextView hoursLeftTextView = (TextView) view.findViewById(R.id.hoursRemainingTextView);
+    hoursLeftTextView.setText("Hours: " + mTimeSpent + "/" + mProject.timeBank);
+}
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
         mListView.setOnItemLongClickListener(this);
